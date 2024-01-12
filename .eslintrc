@@ -68,10 +68,11 @@
       }
     ],
     "no-unused-vars": [
-      "error",
-      {
-        "ignoreRestSiblings": false
-      }
+      "off"
+//    ,
+//      {
+//        "ignoreRestSiblings": false
+//      }
     ],
     "prettier/prettier": [
       "warn",

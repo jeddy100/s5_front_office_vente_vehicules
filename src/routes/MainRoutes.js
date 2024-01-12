@@ -6,7 +6,6 @@ import Loadable from '../ui-component/Loadable';
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
-
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -19,6 +18,9 @@ const MainRoutes = {
     },
     {
       path: 'sample-page',
+      element: <SamplePage />
+    },{
+      path: 'free',
       element: <SamplePage />
     }
   ]

@@ -4,6 +4,9 @@ const config = {
   basename: '/',
   defaultPath: '/dashboard/default',
   fontFamily: `'Roboto', sans-serif`,
+  host: 'localhost',
+  port: '8080',
+  http:'http',
   borderRadius: 12
 };
 

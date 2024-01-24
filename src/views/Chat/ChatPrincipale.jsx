@@ -163,7 +163,7 @@ const ChatPrincipale = () => {
               onChange={handleInputChange}
               style={{ flexGrow: 1, marginRight: '8px' }}
             />
-            <Button variant="contained" color="primary" onClick={handleSendMessage}>
+            <Button variant="contained" color="secondary" onClick={handleSendMessage}>
               envoyer
             </Button>
           </div>

@@ -14,6 +14,7 @@ import Transitions from '../../../../ui-component/extended/Transitions';
 // assets
 import { IconAdjustmentsHorizontal, IconSearch, IconX } from '@tabler/icons';
 import { shouldForwardProp } from '@mui/system';
+import {Recherche} from "../../../../views/recherche/Recherche";
 
 // styles
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({
@@ -118,6 +119,7 @@ MobileSearch.propTypes = {
 const SearchSection = () => {
   const theme = useTheme();
   const [value, setValue] = useState('');
+  console.log(value)
 
   return (
     <>
@@ -184,6 +186,7 @@ const SearchSection = () => {
           aria-describedby="search-helper-text"
           inputProps={{ 'aria-label': 'weight' }}
         />
+
       </Box>
     </>
   );

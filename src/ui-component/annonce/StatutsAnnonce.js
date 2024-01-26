@@ -41,7 +41,8 @@ const StatutsAnnonce = ({ etat }) => {
   const Badge = styled(BaseBadge)(
     ({ theme }) => `
   box-sizing: border-box;
-  margin: 0;
+  margin: 1% 10%;
+  
   padding: 0;
   font-size: 14px;
   list-style: none;
@@ -66,7 +67,7 @@ const StatutsAnnonce = ({ etat }) => {
     text-align: center;
     border-radius: 12px;
     background: ${background()};
-    box-shadow: 0px 4px 6x ${theme.palette.mode === 'dark' ? themes.palette.grey['900'] : themes.palette.grey['300']};
+    box-shadow: 0px 4px 6x ${ themes.palette.grey['300']};
     transform: translate(50%, -50%);
     transform-origin: 100% 0;
   }
@@ -82,7 +83,7 @@ const StatutsAnnonce = ({ etat }) => {
   // }
   return (
     <>
-      <Badge badgeContent={content()}><IconBadge/></Badge>
+      <Badge badgeContent={content()}></Badge>
     </>
   );
 };

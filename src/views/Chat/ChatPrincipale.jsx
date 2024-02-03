@@ -6,15 +6,17 @@ import ChatMenu from './ChatMenu';
 import axios from 'axios';
 import config from '../../config';
 import TotalIncomeLightCard from '../../utils/TotalIncomeLightCard';
+import { useTheme } from '@mui/material/styles';
+import MessageComponent from './MessageComponent';
 // import ChatMenu from './ChatMenu';
 
 const ChatPrincipale = () => {
   // const colors=["",""]
   const [listUsers, setListUser] = useState([
-    // { nom: 'prisca', id: 1 },
-    // { nom: 'Jeddy', id: 2 },
-    // { nom: 'Jessy', id: 3 },
-    // { nom: 'Mendrika', id: 4 }
+    { nom: 'prisca', id: 1 },
+    { nom: 'Jeddy', id: 2 },
+    { nom: 'Jessy', id: 3 },
+    { nom: 'Mendrika', id: 4 }
   ]);
   const [currentUser, setCurrentUser] = useState({
     id: '1',
@@ -27,6 +29,7 @@ const ChatPrincipale = () => {
   const [conversation, setConversation] = useState([]);
 
   const link = `${config.http}://${config.host}:${config.port}`;
+  const theme = useTheme();
 
   useEffect(() => {
     const getDatas = async () => {
@@ -81,7 +84,7 @@ const ChatPrincipale = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} sm={3} m={0}>
+      <Grid item xs={12} sm={4} m={0}>
         <Paper
           elevation={3}
           style={{
@@ -96,14 +99,16 @@ const ChatPrincipale = () => {
           {listUsers?.map((userMessage) => (
             <TotalIncomeLightCard
               key={userMessage.id}
-              onClick={() =>{ handleChangeConversation(userMessage.id)}}
+              onClick={() => {
+                handleChangeConversation(userMessage.id);
+              }}
               texte={userMessage.nom}
               style={{ margin: '5%' }}
             ></TotalIncomeLightCard>
           ))}
         </Paper>
       </Grid>
-      <Grid item xs={12} sm={9} m={0}>
+      <Grid item xs={12} sm={8} m={0}>
         <Paper
           elevation={3}
           style={{
@@ -117,12 +122,12 @@ const ChatPrincipale = () => {
             alignItems: 'center'
           }}
         >
-          <Typography variant="h6">Messenger Chatbot</Typography>
+          <Typography variant="h6">Prisca</Typography>
           <div
             style={{
               flexGrow: 1,
               overflowY: 'auto',
-              marginBottom: '16px',
+              // marginBottom: '1%',
               width: '100%'
             }}
           >
@@ -134,15 +139,26 @@ const ChatPrincipale = () => {
                   variant="rounded"
                   style={{
                     display: 'flex',
-                    margin: '2%',
+                    margin: '0%',
+                    // padding: '3%',
                     width: 'auto',
+                    borderColor: theme.palette.secondary.main,
+                    marginRight: message.idExpediteur === currentUser.id ? '0%' : '45%',
+                    marginLeft: message.idExpediteur === currentUser.id ? '60%' : '0%',
+                    // maxWidth: '45%',
                     flexDirection: 'column',
-                    alignItems: message.idExpediteur === currentUser.id ? 'flex-end' : 'flex-start',
-                    backgroundColor: message.idExpediteur === currentUser.id ? '#ede7f6' : '#ECE5DD'
+                    alignItems: message.idExpediteur === currentUser.id ? 'flex-end' : 'flex-start'
                   }}
                 >
-                  {message.idExpediteur === 'chatbot' && <Avatar style={{ marginRight: '8px' }}>B</Avatar>}
-                  <ListItemText primary={message.contenuMesssage} />
+                  <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    {message.idExpediteur !== currentUser.id && <Avatar style={{ marginRight: '8px' }}>B</Avatar>}
+                    <MessageComponent
+                      style={{}}
+                      message={message.contenuMesssage}
+                      date={message.dateEnvoiMessage}
+                      isCurrentUser={message.idExpediteur === currentUser.id}
+                    />
+                  </div>
                 </ListItem>
               ))}
             </List>
@@ -156,7 +172,7 @@ const ChatPrincipale = () => {
             }}
           >
             <TextField
-              label="Type your message"
+              label="écrivez votre message ici"
               variant="outlined"
               fullWidth
               value={input}

@@ -6,6 +6,7 @@ import Loadable from 'ui-component/Loadable';
 
 // chat routing
 const AnnonceRouting = Loadable(lazy(() => import('views/annonce/Annonce')));
+const DetailRouting = Loadable(lazy(() => import('views/annonce/DetailAnnonce')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -17,6 +18,9 @@ const AnnonceRoutes = {
         {
             path: '/annonce',
             element: <AnnonceRouting />
+        } ,{
+            path: '/detailAnnonce',
+            element: <DetailRouting />
         }
     ]
 };

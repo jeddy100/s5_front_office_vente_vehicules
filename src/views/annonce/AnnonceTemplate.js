@@ -46,7 +46,7 @@ const AnnonceTemplate = ({ annonce }) => {
                 fill: annonce.inFavorites === 1 ? '#fff' : 'none'
               }}
             />
-            <span style={{ fontSize: 12 }}>9</span>
+            <span style={{ fontSize: 12 }}> {annonce.nombreFavoris}</span>
           </IconButton>
         </div>
         <CardContent>

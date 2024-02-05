@@ -2,10 +2,15 @@ import { Button, Card, CardContent, CardMedia, Grid, IconButton, Rating, Stack, 
 import { IconHeart } from '@tabler/icons';
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
+import config from "../../config";
+import axios from "axios";
 
-const AnnonceTemplate = ({ annonce }) => {
+const AnnonceTemplate = ({ annonce,user,link }) => {
   const theme = useTheme();
-  const handleFavoriteClick = (id) => {
+
+
+    const handleFavoriteClick = async (id) => {
+        const response = await axios.post(link+`favori/${user.id_user}/${annonce.id_annonce}`)
     console.log(id);
   };
   return (

@@ -28,7 +28,7 @@ const ChatPrincipale = () => {
 
   const [conversation, setConversation] = useState([]);
 
-  const link = `${config.http}://${config.host}:${config.port}`;
+  const link = `${config.http}://${config.host}`;
   const theme = useTheme();
 
   useEffect(() => {

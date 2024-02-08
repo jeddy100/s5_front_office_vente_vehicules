@@ -19,7 +19,8 @@ const MainRoutes = {
     {
       path: 'sample-page',
       element: <SamplePage />
-    },{
+    },
+    {
       path: 'free',
       element: <SamplePage />
     }

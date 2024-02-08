@@ -1,18 +1,46 @@
 import { Button, Card, CardContent, CardMedia, Grid, IconButton, Rating, Stack, Typography } from '@mui/material';
 import { IconHeart } from '@tabler/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import config from "../../config";
-import axios from "axios";
+import config from '../../config';
+import axios from 'axios';
 
-const AnnonceTemplate = ({ annonce,user,link }) => {
+const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
   const theme = useTheme();
+  const image = require('../../assets/images/Car Sell-2.png');
+  const [images, setImages] = useState([image]);
+  const [imgdef, setImgDef] = useState(0);
 
-
-    const handleFavoriteClick = async (id) => {
-        const response = await axios.post(link+`favori/${user.id_user}/${annonce.id_annonce}`)
+  console.log("users : "+JSON.stringify(user))
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(link + '/annonce/getimagesbyId/' + annonce.id_annonce);
+        if (response.status === 200 && response.data.donnee.length !== 0) {
+          console.log(response.data.donnee + '' + response.data.donnee.length);
+          setImages(response.data.donnee);
+          setImgDef(1);
+        }
+      } catch (e) {
+        console.log('tsisy sary');
+      }
+    };
+    fetchData();
+  }, []);
+  console.log('huhu ' + annonce.id_annonce);
+  console.log(images);
+  const handleFavoriteClick = async (id) => {
+    const response = await axios.post(link + `/favori/${user.userId}/${annonce.id_annonce}`);
+    if(response.status===200){
+        fav=(fav+1);
+        window.location.reload();
+    }
     console.log(id);
   };
+
+  console.log(link + `/favori/${user.userId}/${annonce.id_annonce}`)
+  const refDetailImage = `/detailAnnonce?idAnnonce=${annonce.id_annonce}`;
+
   return (
     <Grid item xs={12} margin={3}>
       <Card elevation={0} sx={{ borderRadius: '8px' }}>
@@ -20,39 +48,47 @@ const AnnonceTemplate = ({ annonce,user,link }) => {
           <CardMedia
             component="a"
             title="Contemplative Reptile"
-            href="/detailAnnonce"
+            href={refDetailImage}
+            image={images[0]}
             sx={{
-              backgroundImage: 'url("https://berrydashboard.io/assets/prod-7-4b3b092a.png")',
-              height: '250px'
+              // backgroundColor:'red',
+              // backgroundImage: "url('"+images[0]+"')",
+              // backgroundSize: 'cover',
+              // backgroundPosition: 'center',
+              height: '250px',
+              boxShadow: 1,
+              transform: imgdef === 0 ? 'scaleY(-1) scaleX(-1)' : ''
             }}
           />
-          <IconButton
-            aria-label="add to favorites"
-            title="ajouter aux favoris"
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              color: annonce.inFavorites === 1 ? '#fff' : '#fff',
-              // backgroundColor: cars.inFavorites ? '#fff' : 'none', // Ajoutez cette ligne pour définir la couleur de fond sur blanc
-              borderRadius: '50%',
-              fontWeight: 'bolder'
-            }}
-            onClick={() => handleFavoriteClick(annonce.id_annonce)} // Replace with your click handling function
-          >
-            <IconHeart
-              enableBackground="new 0 0 24 24"
+          {localStorage.getItem("simpleUserCarSell")!==null?
+            <IconButton
+              aria-label="add to favorites"
+              title="ajouter aux favoris"
               style={{
-                width: 25,
-                height: 25,
-                // backgroundColor: 'red',
-                borderRadius: 300,
-                strokeWidth: 2,
-                fill: annonce.inFavorites === 1 ? '#fff' : 'none'
+                position: 'absolute',
+                bottom: 5,
+                left: 10,
+                color: annonce.inFavorites === 1 ? theme.palette.secondary.light : theme.palette.secondary.light,
+                backgroundColor: annonce.inFavorites ? theme.palette.secondary.dark : '#fff', // Ajoutez cette ligne pour définir la couleur de fond sur blanc
+                borderRadius: '50%',
+                fontWeight: 'bolder'
               }}
-            />
-            <span style={{ fontSize: 12 }}> {annonce.nombreFavoris}</span>
-          </IconButton>
+              onClick={() => handleFavoriteClick(annonce.id_annonce)} // Replace with your click handling function
+            >
+              <IconHeart
+                enableBackground="new 0 0 24 24"
+                style={{
+                  width: 25,
+                  height: 25,
+                  // backgroundColor: 'red',
+                  borderRadius: 300,
+                  strokeWidth: 2,
+                  fill: annonce.inFavorites === 1 ? '#fff' : 'none'
+                }}
+              />
+              <span style={{ fontSize: 12 }}> {annonce.nombreFavoris}</span>
+            </IconButton>:<></>
+          }
         </div>
         <CardContent>
           <Grid container spacing={2}>

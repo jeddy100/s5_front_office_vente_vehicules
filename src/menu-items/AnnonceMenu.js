@@ -1,6 +1,6 @@
-import {IconAdjustments, IconCar} from "@tabler/icons";
+import {IconAdjustments, IconCar, IconHeart} from "@tabler/icons";
 
-const icons = { IconCar };
+const icons = { IconCar,IconHeart };
 
 const AnnonceMenu = {
     id: 'annonce',
@@ -8,11 +8,18 @@ const AnnonceMenu = {
     type: 'group',
     children: [
         {
-            id: 'default',
+            id: 'annonce',
             title: 'Annonce',
             type: 'item',
             url: '/annonce',
             icon: icons.IconCar,
+            breadcrumbs: false
+        },{
+            id: 'favori',
+            title: 'favoris',
+            type: 'item',
+            url: '/favorisAnnonce',
+            icon: icons.IconHeart,
             breadcrumbs: false
         }
     ]

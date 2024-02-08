@@ -3,7 +3,6 @@ import { useTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../../config';
-import {IconAlertTriangle} from "@tabler/icons";
 import ErrorAlert from '../../ui-component/alert/ErrorAlert';
 
 const Recherche = () => {
@@ -27,7 +26,7 @@ const Recherche = () => {
     idMoteur: 'tous',
     idPays: 'tous'
   });
-  const link = `${config.http}://${config.host}:${config.port}`;
+  const link = `${config.http}://${config.host}`;
 
   const [marque, setMarque] = useState([]);
   const [boite, setBoite] = useState([]);

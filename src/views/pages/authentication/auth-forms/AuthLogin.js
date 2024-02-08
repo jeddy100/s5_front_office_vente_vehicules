@@ -103,7 +103,7 @@ const FirebaseLogin = ({ ...others }) => {
                 token: response.data.token,
                 userId:response.data.userId
               }
-              localStorage.setItem("adminUserCarSell",JSON.stringify(data))
+              localStorage.setItem("simpleUserCarSell",JSON.stringify(data))
               document.cookie = `token=${JSON.stringify(data)}; max-age=3600; path=/`;
 
               navigate('/')

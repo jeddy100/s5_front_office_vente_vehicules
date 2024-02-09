@@ -4,9 +4,10 @@ const config = {
   basename: process.env.REACT_APP_BASENAME || '/',
   defaultPath: process.env.REACT_APP_DEFAULT_PATH || '/dashboard/default',
   fontFamily: process.env.REACT_APP_FONT_FAMILY ,
-  host: process.env.REACT_APP_API_HOST ,
+  host: process.env.REACT_APP_API_HOST || 's5backendcloudventevoiture-production.up.railway.app' ,
   port: process.env.REACT_APP_API_PORT ,
-  http: process.env.REACT_APP_HTTP ,
-  borderRadius: process.env.REACT_APP_BORDER_RADIUS || 12}
+  http: process.env.REACT_APP_HTTP || 'https',
+  borderRadius: process.env.REACT_APP_BORDER_RADIUS || 12
+}
 
 export default config;

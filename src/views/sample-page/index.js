@@ -8,9 +8,10 @@ import StatutsAnnonce from '../../ui-component/annonce/StatutsAnnonce';
 import DetailAnnonce from '../annonce/DetailAnnonce';
 import React from 'react';
 import UserList from "../Chat/ChatSide";
+import HeaderLanding from "../landing/HeaderLanding";
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const SamplePage = () => <UserList></UserList>;
+const SamplePage = () => <HeaderLanding></HeaderLanding>;
 
 export default SamplePage;

@@ -21,10 +21,10 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions, Paper, Breadcrumbs, Link
 } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
-import { IconClipboardHeart, IconHeart, IconHeartOff, IconHeartPlus, IconInfoCircle } from '@tabler/icons';
+import {IconClipboardHeart, IconHeart, IconHeartOff, IconHeartPlus, IconHome, IconInfoCircle} from '@tabler/icons';
 import { red } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import config from '../../config';
@@ -33,44 +33,16 @@ import DetailAnnonce from './DetailAnnonce';
 import StatutsAnnonce from '../../ui-component/annonce/StatutsAnnonce';
 import AnnonceTemplate from "./AnnonceTemplate";
 import MessageComponent from "../Chat/MessageComponent";
+import HomeIcon from "@mui/icons-material/Home";
 
 const Annonce = () => {
   const theme = useTheme();
-  const link = `${config.http}://${config.host}:${config.port}`;
-
-  const carData = [
-    {
-      id: 1,
-      marque: 'Toyota',
-      modele: 'Camry',
-      annee: 2022,
-      prix: 25000,
-      image: '/images/1-porsche-911-gt3-2021-rt-hero-front.jpg',
-      description: 'lorem ipsum car 1',
-      date: '2023-07-01 07:00',
-      utilisateur: {
-        nom: 'vali',
-        prenom: 'judith'
-      }
-    },
-    {
-      id: 2,
-      marque: 'Honda',
-      modele: 'Civic',
-      annee: 2021,
-      prix: 22000,
-      date: '2024-07-01 08:00',
-      image: '/images/1-porsche-911-gt3-2021-rt-hero-front.jpg',
-      description: 'lorem ipsum car 2',
-      utilisateur: {
-        nom: 'prisca',
-        prenom: 'fehiarisoa'
-      }
-    }
-  ];
-
+  const link = `${config.http}://${config.host}`;
+  // ty zavatra ty no creer-nao amze page ampiasainao
+  const [user,setUser]=useState({})
   const [image, setImage] = useState('/images/1-porsche-911-gt3-2021-rt-hero-front.jpg');
   const [open, setOpen] = useState(false); // Add this line
+  const [fav,setFav]=useState(0)
 
   const [annonces, setAnnonces] = useState([]);
 
@@ -80,7 +52,22 @@ const Annonce = () => {
       setAnnonces(response.data.donnee);
     };
     fetchData();
+  }, [fav]);
+
+
+  // de avy eo asina an'ty => maka an'le user
+  useEffect(() => {
+    const fetchuser=()=>{
+
+      if(localStorage.getItem("simpleUserCarSell")!=null){
+        setUser(JSON.parse(localStorage.getItem("simpleUserCarSell")))
+      }
+    }
+    fetchuser()
   }, []);
+
+
+
   const handleDetails = () => {
     console.log('lol');
   };
@@ -108,30 +95,23 @@ const Annonce = () => {
 
   return (
     <>
-      <Grid container spacing={3}>
 
-        {/*<Grid item sm={4}>*/}
-        {/*  <AnnonceTemplate />*/}
-        {/*</Grid>*/}
-        {/*<Grid item sm={4}>*/}
-        {/*  <AnnonceTemplate />*/}
-        {/*</Grid>*/}
-        {/*<Grid item sm={4}>*/}
-        {/*  <AnnonceTemplate />*/}
-        {/*</Grid>*/}
-        {/*<Grid item sm={4}>*/}
-        {/*  <AnnonceTemplate />*/}
-        {/*</Grid>*/}
-        {/*<Grid item sm={4}>*/}
-        {/*  <AnnonceTemplate />*/}
-        {/*</Grid>*/}
-        {/*<Grid item sm={4}>*/}
-        {/*  <AnnonceTemplate />*/}
-        {/*</Grid>*/}
-
-      </Grid>
-
-
+      {/*bread crumb */}
+      <Paper elevation={0} sx={{ padding:3 , marginX:'1.4%' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <Typography variant="h3" sx={{ color: theme.palette.grey.A600 }}>Annonces</Typography>
+          </Grid>
+          <Grid item xs={2} alignItems={"end"}>
+            <Breadcrumbs aria-label="breadcrumb" >
+              <Link href="/" sx={{ display: 'flex', alignItems: 'center', color:theme.palette.grey.A600 }}>
+                <IconHome sx={{ width: 20, height: 20, mr: 0.5 }} color={theme.palette.grey.A600}  />
+              </Link>
+              <Typography variant="subtitle1" sx={{ color: theme.palette.grey.A500 }}>annonces</Typography>
+            </Breadcrumbs>
+          </Grid>
+        </Grid>
+      </Paper>
       {/*dialog*/}
       <Dialog open={open} onClose={handleCloseModal} maxWidth="lg"  fullWidth>
         <DialogContent>
@@ -145,11 +125,11 @@ const Annonce = () => {
       </Dialog>
       {/*end dialog*/}
 
-      <Grid container spacing={3}>
+      <Grid container spacing={4}>
         {annonces?.map((cars, index) => (
 
             <Grid item sm={4} key={index}>
-              <AnnonceTemplate annonce={cars}/>
+              <AnnonceTemplate annonce={cars} user={user} link={link} fav={fav}/>
             </Grid>
 
           // <Card

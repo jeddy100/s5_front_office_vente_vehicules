@@ -4,7 +4,7 @@ import {
     Badge,
     Button,
     capitalize,
-    Card,
+    Card, CardActionArea,
     CardContent,
     CardHeader,
     Divider,
@@ -128,8 +128,9 @@ const ChatPrincipale = () => {
   };
 
   const handleChangeConversation = (user) => {
-    // setMessageRecepteur(user);
+    setMessageRecepteur(user);
     console.log(user);
+    // console.log(JSON.stringify(listUsers))
   };
 
   return (
@@ -155,36 +156,33 @@ const ChatPrincipale = () => {
             </Typography>
           </CardContent>
           {listUsers?.map((userMessage, index) => (
-            <CardContent
-              key={index}
-              onClick={() => {
-                handleChangeConversation(userMessage.id);
-              }}
-              sx={{ display: 'flex', alignItems: 'center', '&:hover': { backgroundColor: theme.palette.primary.light } }}
-            >
-              <Avatar
-                sx={{
-                  bgcolor: theme.palette.primary.light,
-                  color: theme.palette.primary.dark,
-                  fontSize: '1rem',
-                  width: '40px',
-                  height: '40px',
-                  marginRight: '10px' // Ajout de marge à droite pour séparer l'avatar de la typographie
-                }}
-                aria-label="recipe"
-              >
-                {getFirstLetterFromName(userMessage.nom)}
-              </Avatar>
-              <Typography variant="body1" align="left" >
-                {userMessage.nom}
-              </Typography>
-                <Divider />
-                <IconButton style={{marginLeft:"70%", color:theme.palette.primary.dark}}>
-                    <IconSend />
-                </IconButton>
+              <CardActionArea key={index} style={{marginBottom:'2%'}} onClick={()=>handleChangeConversation(userMessage)}>
+                  <CardContent
+                      sx={{ display: 'flex', alignItems: 'center',height:"50px" ,'&:hover': { backgroundColor: '#f4f8fd' } }}
+                  >
+                      <Avatar
+                          sx={{
+                              bgcolor: theme.palette.primary.light,
+                              color: theme.palette.primary.dark,
+                              fontSize: '1rem',
+                              width: '40px',
+                              height: '40px',
+                              marginRight: '10px' // Ajout de marge à droite pour séparer l'avatar de la typographie
+                          }}
+                          aria-label="recipe"
+                      >
+                          {getFirstLetterFromName(userMessage.nom)}
+                      </Avatar>
+                      <Typography variant="body1" align="left" >
+                          {userMessage.nom}
+                      </Typography>
+                      <Divider />
+                      <IconButton style={{marginLeft:"70%", color:theme.palette.primary.dark}}>
+                          <IconSend />
+                      </IconButton>
 
-            </CardContent>
-
+                  </CardContent>
+              </CardActionArea>
               ))}
         </Card>
       </Grid>

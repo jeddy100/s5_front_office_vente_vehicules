@@ -1,5 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Grid, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    Avatar,
+    Badge,
+    Button,
+    capitalize,
+    Card,
+    CardContent,
+    CardHeader,
+    Divider,
+    Grid, IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
+    TextField,
+    Typography
+} from '@mui/material';
 // import MainCard from 'ui-component/cards/MainCard';
 // import ChatList from './ChatMenu';
 import ChatMenu from './ChatMenu';
@@ -8,6 +24,9 @@ import config from '../../config';
 import TotalIncomeLightCard from '../../utils/TotalIncomeLightCard';
 import { useTheme } from '@mui/material/styles';
 import MessageComponent from './MessageComponent';
+import {IconMenu, IconMessage, IconSend} from '@tabler/icons';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { CallTwoTone, ErrorTwoTone, ExpandMore, MoreHorizTwoTone, VideoCallTwoTone } from '@mui/icons-material';
 // import ChatMenu from './ChatMenu';
 
 const ChatPrincipale = () => {
@@ -19,12 +38,29 @@ const ChatPrincipale = () => {
     { nom: 'Mendrika', id: 4 }
   ]);
   const [currentUser, setCurrentUser] = useState({
-    id: '1',
+    id: 'USR005',
     nom: 'prisca',
     role: 'user'
   });
+  const [userToken, setUserToken] = useState({});
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${userToken.token}`
+  };
+  // const config = {
+  //     headers: headers
+  // };
+  useEffect(() => {
+    const getjson = async () => {
+      console.log('leo ' + JSON.stringify(localStorage.getItem('simpleUserCarSell')));
+      const token = await JSON.parse(localStorage.getItem('simpleUserCarSell'));
+      setUserToken(token || {});
+    };
+    getjson();
+  }, []);
+
   const [sentMessage, setSentMessage] = useState(0);
-  const [messageRecepteur, setMessageRecepteur] = useState({ id: '2', nom: 'Jessy', role: 'user' });
+  const [messageRecepteur, setMessageRecepteur] = useState({ id: 'USR003', nom: 'Jessy', role: 'user' });
 
   const [conversation, setConversation] = useState([]);
 
@@ -57,24 +93,38 @@ const ChatPrincipale = () => {
   // };
   const handleInputChange = (e) => {
     setInput(e.target.value);
+    setMessages({ contenuMesssage: e.target.value, idExpediteur: currentUser.id, idRecepteur: messageRecepteur.id });
   };
+  const conversationRef = useRef(null);
+
+  useEffect(() => {
+    if (conversationRef.current) {
+      conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
+    }
+  }, [conversation?.messages]);
 
   const handleSendMessage = async () => {
     if (input.trim() === '') return;
     try {
       if (messages.contenuMesssage !== '') {
-        setMessages({ contenuMesssage: input, idExpediteur: currentUser.id, idRecepteur: messageRecepteur.id });
-        // You can add logic here to handle the chatbot's response
-        console.log('here : ' + JSON.stringify(messages));
-        const sendMessage = await axios.post(link + '/SendMessage', messages);
+        console.log(`Authorization: 'Bearer ' + ${userToken.token}`);
+        console.log('messages ' + JSON.stringify(messages));
+        const sendMessage = await axios.post(link + '/SendMessage', messages, {
+          headers: {
+            Authorization: 'Bearer ' + userToken.token
+          }
+        });
         console.log(sendMessage.data);
         setSentMessage(sentMessage + 1);
         setMessages({});
         // setInput('');
       }
     } catch (e) {
-      console.log(e);
+      console.log(JSON.stringify(e));
     }
+  };
+  const getFirstLetterFromName = (nom) => {
+    return capitalize(nom.charAt(0));
   };
 
   const handleChangeConversation = (user) => {
@@ -85,28 +135,58 @@ const ChatPrincipale = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={4} m={0}>
-        <Paper
-          elevation={3}
-          style={{
-            padding: '3% 3% 3%',
-            maxWidth: '100%',
-            display: 'flex',
-            margin: '2% auto',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}
-        >
-          {listUsers?.map((userMessage) => (
-            <TotalIncomeLightCard
-              key={userMessage.id}
+        <Card elevation={3} style={{ maxWidth: '100%', margin: '2% auto', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+          <CardContent sx={{ display: 'flex', alignItems: 'center', boxShadow: 1 }}>
+            <Avatar
+              sx={{
+                bgcolor: theme.palette.warning.light,
+                color: theme.palette.warning.dark,
+                fontSize: '1rem',
+                width: '40px',
+                height: '40px',
+                marginRight: '10px' // Ajout de marge à droite pour séparer l'avatar de la typographie
+              }}
+              aria-label="recipe"
+            >
+              {getFirstLetterFromName(currentUser.nom)}
+            </Avatar>
+            <Typography variant="h4" align="left" className="css-1ve2rt6">
+              {currentUser.nom}
+            </Typography>
+          </CardContent>
+          {listUsers?.map((userMessage, index) => (
+            <CardContent
+              key={index}
               onClick={() => {
                 handleChangeConversation(userMessage.id);
               }}
-              texte={userMessage.nom}
-              style={{ margin: '5%' }}
-            ></TotalIncomeLightCard>
-          ))}
-        </Paper>
+              sx={{ display: 'flex', alignItems: 'center', '&:hover': { backgroundColor: theme.palette.primary.light } }}
+            >
+              <Avatar
+                sx={{
+                  bgcolor: theme.palette.primary.light,
+                  color: theme.palette.primary.dark,
+                  fontSize: '1rem',
+                  width: '40px',
+                  height: '40px',
+                  marginRight: '10px' // Ajout de marge à droite pour séparer l'avatar de la typographie
+                }}
+                aria-label="recipe"
+              >
+                {getFirstLetterFromName(userMessage.nom)}
+              </Avatar>
+              <Typography variant="body1" align="left" >
+                {userMessage.nom}
+              </Typography>
+                <Divider />
+                <IconButton style={{marginLeft:"70%", color:theme.palette.primary.dark}}>
+                    <IconSend />
+                </IconButton>
+
+            </CardContent>
+
+              ))}
+        </Card>
       </Grid>
       <Grid item xs={12} sm={8} m={0}>
         <Paper
@@ -122,17 +202,66 @@ const ChatPrincipale = () => {
             alignItems: 'center'
           }}
         >
-          <Typography variant="h6">Prisca</Typography>
+          <Grid container className="css-14dekvw">
+            <Grid item className="css-1wxaqej" style={{ marginX: '20%' }}>
+              <Grid container spacing={2} className="css-qfscy">
+                <Avatar
+                  sx={{
+                    bgcolor: theme.palette.secondary.light,
+                    color: theme.palette.secondary.main,
+                    fontSize: '1rem',
+                    width: '35px',
+                    marginTop: '8%',
+                    marginX: '2%',
+                    height: '35px'
+                  }}
+                  aria-label="recipe"
+                >
+                  {getFirstLetterFromName(messageRecepteur.nom)}
+                </Avatar>
+                <Grid item xs={5} className="css-15j76c0">
+                  <Grid container>
+                    <Grid item xs={12} className="css-15j76c0">
+                      <Typography variant="h4" className="css-1j5dgsv">
+                        {messageRecepteur.nom}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            {/*<Grid item className="css-1wxaqej"></Grid>*/}
+            {/*<Grid item className="css-1wxaqej">*/}
+            {/*    <Button className="css-1w8s6so" size="large" aria-label="chat user call">*/}
+            {/*        <CallTwoTone className="css-vubbuv" />*/}
+            {/*    </Button>*/}
+            {/*</Grid>*/}
+            {/*<Grid item className="css-1wxaqej">*/}
+            {/*    <Button className="css-1w8s6so" size="large" aria-label="chat user video call">*/}
+            {/*        <VideoCallTwoTone className="css-vubbuv" />*/}
+            {/*    </Button>*/}
+            {/*</Grid>*/}
+            {/*<Grid item className="css-1wxaqej">*/}
+            {/*    <Button className="css-1w8s6so" size="large" aria-label="chat user information">*/}
+            {/*        <ErrorTwoTone className="css-vubbuv" />*/}
+            {/*    </Button>*/}
+            {/*</Grid>*/}
+            {/*<Grid item className="css-1wxaqej">*/}
+            {/*    <Button className="css-1w8s6so" size="large" aria-label="chat user details change">*/}
+            {/*        <MoreHorizTwoTone className="css-vubbuv" />*/}
+            {/*    </Button>*/}
+            {/*</Grid>*/}
+          </Grid>
           <div
+            ref={conversationRef}
             style={{
               flexGrow: 1,
               overflowY: 'auto',
-              // marginBottom: '1%',
               width: '100%'
             }}
           >
             <List>
-              {conversation.map((message, index) => (
+              {conversation?.messages?.map((message, index) => (
                 <ListItem
                   key={index}
                   alignItems="flex-start"
@@ -140,12 +269,10 @@ const ChatPrincipale = () => {
                   style={{
                     display: 'flex',
                     margin: '0%',
-                    // padding: '3%',
                     width: 'auto',
                     borderColor: theme.palette.secondary.main,
                     marginRight: message.idExpediteur === currentUser.id ? '0%' : '45%',
                     marginLeft: message.idExpediteur === currentUser.id ? '60%' : '0%',
-                    // maxWidth: '45%',
                     flexDirection: 'column',
                     alignItems: message.idExpediteur === currentUser.id ? 'flex-end' : 'flex-start'
                   }}
@@ -184,7 +311,7 @@ const ChatPrincipale = () => {
             </Button>
           </div>
         </Paper>
-      </Grid>
+      </Grid>{' '}
     </Grid>
   );
 };

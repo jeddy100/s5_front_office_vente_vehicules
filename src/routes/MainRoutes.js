@@ -3,10 +3,12 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from '../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
+import {Navigate} from "react-router-dom";
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
 // ==============================|| MAIN ROUTING ||============================== //
+const isAuthenticated = localStorage.getItem("simpleUserCarSell")!==null;
 
 const MainRoutes = {
   path: '/',
@@ -14,15 +16,15 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <SamplePage />
+      element:isAuthenticated?<SamplePage />:<Navigate to="/annonce" replace={true}/>
     },
     {
       path: 'sample-page',
-      element: <SamplePage />
+      element: isAuthenticated ?<SamplePage />:<Navigate to="/annonce" replace={true}/>
     },
     {
       path: 'free',
-      element: <SamplePage />
+      element: isAuthenticated?<SamplePage />:<Navigate to="/annonce" replace={true}/>
     }
   ]
 };

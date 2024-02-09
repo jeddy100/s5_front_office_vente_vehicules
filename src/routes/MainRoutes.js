@@ -16,15 +16,11 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element:isAuthenticated?<SamplePage />:<Navigate to="/annonce" replace={true}/>
-    },
-    {
-      path: 'sample-page',
-      element: isAuthenticated ?<SamplePage />:<Navigate to="/annonce" replace={true}/>
+      element:<Navigate to="/annonce" replace={true}/>
     },
     {
       path: 'free',
-      element: isAuthenticated?<SamplePage />:<Navigate to="/annonce" replace={true}/>
+      element: <Navigate to="/annonce" replace={true}/>
     }
   ]
 };

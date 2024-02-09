@@ -57,7 +57,7 @@ const VenteAnnonce = () => {
 
   useEffect(() => {
     setFormAnnonce({
-      utilisateur:annonce?.utilisateur?.id_user,
+      utilisateur:userToken.userId,
       annonce:annonce?.id_annonce
     })
   }, [annonce]);
@@ -71,7 +71,7 @@ const VenteAnnonce = () => {
       if(response.data.status===200){
         setVenteEffectue(1)
       }
-      else{
+      else if(response.data.status===404){
         setVenteEffectue(-1)
         setErreurs(response.data.erreur)
       }
@@ -80,6 +80,7 @@ const VenteAnnonce = () => {
       console.log("erreur")
     }
   }
+  console.log()
   return (
     <>
       <Paper elevation={0} sx={{ padding: 3, marginX: '1.4%' }}>

@@ -6,9 +6,10 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 import ChatRoutes from './ChatRoutes';
 import AnnonceRoutes from './AnnonceRoutes';
 import SearchRoutes from "./SearchRoutes";
+import ProfileRoutes from './ProfileRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-  return useRoutes([MainRoutes, AuthenticationRoutes, ChatRoutes, AnnonceRoutes,SearchRoutes]);
+  return useRoutes([MainRoutes, AuthenticationRoutes, ChatRoutes, AnnonceRoutes,SearchRoutes, ProfileRoutes]);
 }

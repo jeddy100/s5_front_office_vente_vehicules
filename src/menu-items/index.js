@@ -8,7 +8,7 @@ import ProfileMenu from './ProfileMenu';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [pages, other,chatMenu,searchMenu,AnnonceMenu,ProfileMenu]
+  items: [ chatMenu,searchMenu,AnnonceMenu,ProfileMenu]
 };
 
 export default menuItems;

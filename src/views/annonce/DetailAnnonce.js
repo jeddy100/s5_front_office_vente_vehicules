@@ -22,7 +22,7 @@ import {
   IconPhoneCall,
   IconShoppingCart
 } from '@tabler/icons';
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from "../../config";
@@ -35,6 +35,7 @@ const DetailAnnonce = () => {
   const link = `${config.http}://${config.host}`;
   const [imgdef,setImgDef]=useState(0)
   const [i,setI] =useState()
+  const navigate= useNavigate();
 
   // obtenir l'annonce à partir de l'url
   useEffect(() => {
@@ -65,141 +66,21 @@ const DetailAnnonce = () => {
 
   console.log("houlala : "+idAnnonce)
   const theme = useTheme();
-  const annonce2 = {
-    id_annonce: 'ANNONCE2',
-    utilisateur: {
-      id_user: 'USR2',
-      nom: 'ravo',
-      prenom: 'hary',
-      date_naissance: '2002-01-19',
-      email: 'ravohary@gmail.com',
-      phone: '0345678990',
-      password: '12345',
-      enabled: true
-    },
-    vehicule: {
-      id_vehicule: 'V2',
-      immatricule: 'XYZ456',
-      annee_fabrication: 2020,
-      kilometrage_vehicule: 8000.0,
-      nombre_sieges: 7,
-      masse_vehicule: 1500.0,
-      boite: {
-        id_boite: 'B2',
-        nom_boite: 'Boite manuelle'
-      },
-      carburant: {
-        id_carburant: 'C2',
-        nom_carburant: 'Diesel'
-      },
-      categorie: {
-        id_categorie: 'CAT2',
-        nom_categorie: 'Berline'
-      },
-      couleur: {
-        id_couleur: 'COU2',
-        nom_couleur: 'Rouge'
-      },
-      modele: {
-        id_modele: 'MOD2',
-        nom_modele: 'Civic',
-        marque: {
-          id_marque: 'M2',
-          nom_marque: 'Honda'
-        }
-      },
-      moteur: {
-        id_moteur: 'MT2',
-        nom_moteur: 'Diesel 2.0L',
-        puissance: 180.0
-      },
-      pays: {
-        id_pays: 'P2',
-        nom_pays: 'Allemagne'
-      }
-    },
-    date_annonce: '2024-01-19T16:47:18',
-    prix: 324323.0,
-    etat: 10,
-    commission: 0.0,
-    description: "description de l'annonce 2",
-    prefixes: 'ANN',
-    inFavorites: false,
-    totalCommission: 0.0,
-    sequenceName: 'annonce_seq',
-    prixVehiculeAvecCommission: 324323.0
-  };
 
-  const itemData = [
-    {
-      img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-      title: 'Breakfast',
-      author: '@bkristastucchio',
-      featured: true
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-      title: 'Burger',
-      author: '@rollelflex_graphy726'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-      title: 'Camera',
-      author: '@helloimnik'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-      title: 'Coffee',
-      author: '@nolanissac'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-      title: 'Hats',
-      author: '@hjrc33'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-      title: 'Honey',
-      author: '@arwinneil',
-      featured: true
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-      title: 'Basketball',
-      author: '@tjdragotta'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-      title: 'Fern',
-      author: '@katie_wasserman'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-      title: 'Mushrooms',
-      author: '@silverdalex'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-      title: 'Tomato basil',
-      author: '@shelleypauls'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-      title: 'Sea star',
-      author: '@peterlaster'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-      title: 'Bike',
-      author: '@southside_customs'
-    }
-  ];
   function srcset(image, width, height, rows = 1, cols = 1) {
     return {
       src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
       srcSet: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format&dpr=2 2x`
     };
   }
+
+  function handleContact() {
+    navigate(`/chat?idUser=${annonce?.utilisateur?.id_user}`)
+  }
+
+  const handleBuy = () => {
+    navigate(`/achatVehicule?idAnnonce=${idAnnonce}`)
+  };
   return (
     // <Paper
     //   elevation={3}
@@ -345,6 +226,7 @@ const DetailAnnonce = () => {
               variant={'contained'}
               fullWidth
               style={{ background: theme.palette.secondary.light, margin: '5% 0%', color: theme.palette.secondary.dark }}
+              onClick={handleContact}
           >
             <IconMessage2 style={{ marginRight: '2%' }}></IconMessage2> Contacter le propriétaire
           </Button>
@@ -352,6 +234,7 @@ const DetailAnnonce = () => {
               variant={'contained'}
               fullWidth
               style={{ background: theme.palette.warning.dark, margin: '5% 0%', color: theme.palette.grey['900'] }}
+              onClick={handleBuy}
           >
             <IconShoppingCart style={{ marginRight: '2%' }}></IconShoppingCart> Acheter
           </Button>

@@ -20,15 +20,14 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-// import MainCard from 'ui-component/cards/MainCard';
-// import ChatList from './ChatMenu';
-import ChatMenu from './ChatMenu';
+
 import axios from 'axios';
 import config from '../../config';
-import TotalIncomeLightCard from '../../utils/TotalIncomeLightCard';
 import { useTheme } from '@mui/material/styles';
 import MessageComponent from './MessageComponent';
-import { IconHome, IconMenu, IconMessage, IconSend } from '@tabler/icons';
+import { IconSend } from '@tabler/icons';
+
+import { IconHome, IconMenu, IconMessage } from '@tabler/icons';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { CallTwoTone, ErrorTwoTone, ExpandMore, MoreHorizTwoTone, VideoCallTwoTone } from '@mui/icons-material';
 // import ChatMenu from './ChatMenu';
@@ -41,13 +40,19 @@ const ChatPrincipale = () => {
     { nom: 'Jessy', id: 3 },
     { nom: 'Mendrika', id: 4 }
   ]);
-  const [currentUser, setCurrentUser] = useState({}
-  );
+  const [currentUser, setCurrentUser] = useState({});
   const [userToken, setUserToken] = useState({});
   const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${userToken.token}`
   };
+  const [sentMessage, setSentMessage] = useState(0);
+  const [messageRecepteur, setMessageRecepteur] = useState({});
+  // utilisateur venant de l'url
+  const [conversation, setConversation] = useState([]);
+
+  const link = `${config.http}://${config.host}`;
+  const theme = useTheme();
 
 
   useEffect(() => {
@@ -60,31 +65,41 @@ const ChatPrincipale = () => {
   }, []);
 
   useEffect(() => {
-    const getCurrentuser = async () => {
-      if (localStorage.getItem('simpleUserCarSell')!==null) {
-          try{
-              const response = await axios.get(link + `/user/userByid/${userToken.userId}`);
-              if (response.data.donnee.utilisateur!==null) {
-                  setCurrentUser(response.data?.donnee?.utilisateur?response.data.donnee.utilisateur:{});
-              }
-              console.log('>>>>' + JSON.stringify(response.data?.donnee?.utilisateur?response.data.donnee.utilisateur:"tsisy"));
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId=(urlParams.get('idUser')) ;
+    console.log('User ID:', userId);
+    const getUserById = async (userId) => {
+      try {
+        const resp = await axios.get(link + `/user/userByid/${userId}`);
+        console.log(JSON.stringify(resp.data.donnee.utilisateur));
+        setMessageRecepteur(resp.data.donnee.utilisateur)
+        const postconversation = await axios.post(link + `/getConversation`, {
+          idExpediteur: currentUser.userId,
+          idRecepteur: messageRecepteur.userId
+        });
+        setConversation(postconversation.data.donnee);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getUserById(userId);
+  }, []);
 
+  useEffect(() => {
+    const getCurrentuser = async () => {
+      if (localStorage.getItem('simpleUserCarSell') !== null) {
+        try {
+          const response = await axios.get(link + `/user/userByid/${userToken.userId}`);
+          if (response.data.donnee.utilisateur !== null) {
+            setCurrentUser(response.data?.donnee?.utilisateur ? response.data.donnee.utilisateur : {});
           }
-          catch (e) {
-              console.log(e)
-          }
-       }
+        } catch (e) {
+          console.log(e);
+        }
+      }
     };
     getCurrentuser();
   }, [userToken]);
-
-  const [sentMessage, setSentMessage] = useState(0);
-  const [messageRecepteur, setMessageRecepteur] = useState({});
-
-  const [conversation, setConversation] = useState([]);
-
-  const link = `${config.http}://${config.host}`;
-  const theme = useTheme();
 
   useEffect(() => {
     const getDatas = async () => {
@@ -102,7 +117,7 @@ const ChatPrincipale = () => {
       setConversation(postconversation.data.donnee);
     };
     getDatas();
-  }, [ currentUser,messageRecepteur,sentMessage ]);
+  }, [currentUser, messageRecepteur, sentMessage]);
 
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState({});
@@ -121,6 +136,8 @@ const ChatPrincipale = () => {
       conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
     }
   }, [conversation?.messages]);
+
+
 
   const handleSendMessage = async () => {
     if (input.trim() === '') return;
@@ -152,9 +169,9 @@ const ChatPrincipale = () => {
     console.log(JSON.stringify(listUsers));
   };
 
-  console.log("see details ")
-    console.log("current "+JSON.stringify(currentUser))
-    console.log("conv "+JSON.stringify(messageRecepteur))
+  console.log('see details ');
+  console.log('current ' + JSON.stringify(currentUser));
+  console.log('conv ' + JSON.stringify(messageRecepteur));
 
   return (
     <>
@@ -193,15 +210,23 @@ const ChatPrincipale = () => {
                 }}
                 aria-label="recipe"
               >
-                {getFirstLetterFromName(currentUser.nom?currentUser.nom:"u")}
+                {getFirstLetterFromName(currentUser.nom ? currentUser.nom : 'u')}
               </Avatar>
-              <Typography variant="h4" align="left" className="css-1ve2rt6">
+              <Typography variant="h4" align="left" width={100}>
                 {currentUser.nom}
               </Typography>
             </CardContent>
+
+            <Divider/>
             {listUsers?.map((userMessage, index) => (
-              <CardActionArea key={index} style={{ marginBottom: '2%' , paddingX:'2%' }} onClick={() => handleChangeConversation(userMessage)}>
-                <CardContent sx={{ display: 'flex', alignItems: 'center', paddingX:'2%', height: '50px', '&:hover': { backgroundColor: '#f4f8fd' } }}>
+              <CardActionArea
+                key={index}
+                style={{ marginBottom: '2%', paddingX: '2%' }}
+                onClick={() => handleChangeConversation(userMessage)}
+              >
+                <CardContent
+                  sx={{ display: 'flex', alignItems: 'center', paddingX: '2%', height: '50px', '&:hover': { backgroundColor: '#f4f8fd' } }}
+                >
                   <Avatar
                     sx={{
                       bgcolor: theme.palette.primary.light,
@@ -213,7 +238,7 @@ const ChatPrincipale = () => {
                     }}
                     aria-label="recipe"
                   >
-                    {getFirstLetterFromName(userMessage.nom?userMessage.nom:"")}
+                    {getFirstLetterFromName(userMessage.nom ? userMessage.nom : '')}
                   </Avatar>
                   <Typography variant="body1" align="left">
                     {userMessage.nom}
@@ -256,7 +281,7 @@ const ChatPrincipale = () => {
                     }}
                     aria-label="recipe"
                   >
-                    {getFirstLetterFromName(messageRecepteur.nom?messageRecepteur.nom:"")}
+                    {getFirstLetterFromName(messageRecepteur.nom ? messageRecepteur.nom : '')}
                   </Avatar>
                   <Grid item xs={5} className="css-15j76c0">
                     <Grid container>

@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import config from '../../config';
 import axios from 'axios';
+import {useNavigate} from "react-router";
 
 const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const image = require('../../assets/images/Car Sell-2.png');
   const [images, setImages] = useState([image]);

@@ -7,7 +7,7 @@ import AnnonceMenu from "./AnnonceMenu";
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [pages, other,chatMenu,searchMenu,AnnonceMenu]
+  items: [ chatMenu,searchMenu,AnnonceMenu]
 };
 
 export default menuItems;

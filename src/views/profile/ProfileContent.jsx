@@ -26,6 +26,7 @@ import axios from 'axios';
 import config from '../../config';
 import AnnonceTemplate from '../annonce/AnnonceTemplate';
 import { IconCoin, IconList, IconUser } from '@tabler/icons';
+import StatutsAnnonce from '../../ui-component/annonce/StatutsAnnonce';
 
 function ProfileContent() {
   const link = `${config.http}://${config.host}`;
@@ -153,12 +154,16 @@ function ProfileContent() {
               </CardHeader>
               <Divider />
               <CardContent>
-                {annonces?.map((cars, index) => (
+                <Grid spacing={2} style={{ display: 'flex', alignItems: 'center' }}>
+                  {annonces?.map((cars, index) => (
 
-                  <Grid item sm={4} key={index}>
-                    <AnnonceTemplate annonce={cars} user={user} link={link} fav={fav} showButton={false}/>
-                  </Grid>
-                ))}
+                    <Grid item xs={4} key={index}>
+                      <StatutsAnnonce etat={cars.etat} style={{ top:20 , position: 'absolute' }} />
+                      <AnnonceTemplate style={{ position: 'relative' }} annonce={cars} user={user} link={link} fav={fav} showButton={false} />
+                    </Grid>
+                  ))}
+                </Grid>
+
                   </CardContent>
 
             </Card>

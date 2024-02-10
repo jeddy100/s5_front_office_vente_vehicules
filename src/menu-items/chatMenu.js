@@ -11,7 +11,7 @@ const chatMenu = {
   type: 'group',
   children: [
     {
-      id: 'default',
+      id: 'ds',
       title: 'Message',
       type: 'item',
       url: '/chat',

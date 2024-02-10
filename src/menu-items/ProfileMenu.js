@@ -7,7 +7,7 @@ const ProfileMenu = {
     type: 'group',
     children: [
         {
-            id: 'default',
+            id: 'jifd',
             title: 'Profile',
             type: 'item',
             url: '/profile',

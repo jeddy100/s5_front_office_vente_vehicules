@@ -7,7 +7,7 @@ export const searchMenu = {
   type: 'group',
   children: [
     {
-      id: 'default',
+      id: 'as',
       title: 'Filtres',
       type: 'item',
       url: '/recherche',

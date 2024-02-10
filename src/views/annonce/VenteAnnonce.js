@@ -16,6 +16,7 @@ const VenteAnnonce = () => {
   const date = new Date();
   const [userToken, setUserToken] = useState({});
   const[erreurs,setErreurs]=useState("")
+  const[success,setSuccess]=useState("")
   const [venteEffectue,setVenteEffectue]=useState(0)
   useEffect(() => {
     const getjson = async () => {
@@ -62,25 +63,32 @@ const VenteAnnonce = () => {
     })
   }, [annonce]);
   console.log("form"+JSON.stringify(formAnnonce))
-
   // payer une annonce
   const pay=async ()=>{
     try{
+
       const response= await axios.post(link+"/annonce/vendreVehicule",formAnnonce,
       )
-      if(response.data.status===200){
+      console.log(JSON.stringify(response.data))
+      console.log()
+      if(response.data.statut===200){
         setVenteEffectue(1)
+        setSuccess()
+        console.log("payed")
       }
-      else if(response.data.status===404){
+      else if(response.data.statut===404){
         setVenteEffectue(-1)
         setErreurs(response.data.erreur)
+        console.log("une erreur ")
+
       }
-      console.log("payed")
     }catch (e){
       console.log("erreur")
     }
   }
   console.log()
+  console.log(">?"+localStorage.getItem("simpleUserCarSell"))
+
   return (
     <>
       <Paper elevation={0} sx={{ padding: 3, marginX: '1.4%' }}>
@@ -138,10 +146,10 @@ const VenteAnnonce = () => {
               <Alert icon={<IconCheck fontSize="inherit" />} severity="success">
                 Payement effectué
               </Alert>:<></>
-          }{venteEffectue===-1?
-            <Alert icon={<WarningTwoTone fontSize="inherit" />} style={{ marginLeft: '5%%'}} severity="error">
+          }{erreurs &&
+            <Alert icon={<WarningTwoTone fontSize="inherit" />} style={{ marginLeft: '5%%',marginBottom:'3%'}} severity="error">
               {erreurs}
-            </Alert>:<></>
+            </Alert>
         }
           <Grid sx={{ display: 'flex', alignItems: 'center', marginBottom: '2%' }}>
             <Typography>Vehicule : </Typography>
@@ -167,10 +175,12 @@ const VenteAnnonce = () => {
         <Button
           variant={'contained'}
           fullWidth
-          style={{ background: theme.palette.warning.dark, margin: '5% 0%', color: theme.palette.grey['900'] }}
+          style={{ background: venteEffectue===1?theme.palette.success.dark:theme.palette.warning.dark, margin: '5% 0%', color: theme.palette.grey['900'] }}
+          disabled={venteEffectue===1?true:false}
           onClick={pay}
         >
-          <IconCoins style={{ marginRight: '2%' }}></IconCoins> Payer
+          {venteEffectue===1?<><IconCheck style={{ marginRight: '2%' }}></IconCheck> payé</>:<><IconCoins style={{ marginRight: '2%' }}></IconCoins> Payer</>}
+
         </Button>
       </Card>
     </>

@@ -1,18 +1,17 @@
-import {IconAdjustments, IconCar} from "@tabler/icons";
+import { IconAdjustments, IconCar, IconUser } from '@tabler/icons';
 
-const icons = { IconCar };
-
+const icons = { IconUser };
 const ProfileMenu = {
     id: 'profile',
     title: 'Profile',
     type: 'group',
     children: [
         {
-            id: 'default',
+            id: 'jifd',
             title: 'Profile',
             type: 'item',
             url: '/profile',
-            icon: icons.IconCar,
+            icon: icons.IconUser,
             breadcrumbs: false
         }
     ]

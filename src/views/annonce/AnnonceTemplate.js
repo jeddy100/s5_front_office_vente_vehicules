@@ -1,23 +1,25 @@
 import { Button, Card, CardContent, CardMedia, Grid, IconButton, Rating, Stack, Typography } from '@mui/material';
-import { IconHeart } from '@tabler/icons';
+import {IconHeart, IconShoppingCart} from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import config from '../../config';
 import axios from 'axios';
+import {useNavigate} from "react-router";
 
 const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const image = require('../../assets/images/Car Sell-2.png');
   const [images, setImages] = useState([image]);
   const [imgdef, setImgDef] = useState(0);
-
-  console.log("users : "+JSON.stringify(user))
+  const handleBuy = () => {
+    navigate(`/achatVehicule?idAnnonce=${annonce.id_annonce}`)
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(link + '/annonce/getimagesbyId/' + annonce.id_annonce);
         if (response.status === 200 && response.data.donnee.length !== 0) {
-          console.log(response.data.donnee + '' + response.data.donnee.length);
           setImages(response.data.donnee);
           setImgDef(1);
         }
@@ -27,18 +29,15 @@ const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
     };
     fetchData();
   }, []);
-  console.log('huhu ' + annonce.id_annonce);
-  console.log(images);
+
   const handleFavoriteClick = async (id) => {
     const response = await axios.post(link + `/favori/${user.userId}/${annonce.id_annonce}`);
     if(response.status===200){
         fav=(fav+1);
         window.location.reload();
     }
-    console.log(id);
   };
 
-  console.log(link + `/favori/${user.userId}/${annonce.id_annonce}`)
   const refDetailImage = `/detailAnnonce?idAnnonce=${annonce.id_annonce}`;
 
   return (
@@ -86,7 +85,7 @@ const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
                   fill: annonce.inFavorites === 1 ? '#fff' : 'none'
                 }}
               />
-              <span style={{ fontSize: 12 }}> {annonce.nombreFavoris}</span>
+              {/*<span style={{ fontSize: 12 }}> {annonce.nombreFavoris}</span>*/}
             </IconButton>:<></>
           }
         </div>
@@ -109,14 +108,13 @@ const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
               </Stack>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" color="primary" size="medium" sx={{ width: '100%' }} aria-label="product add to cart">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15.55 11 17.55 6H6.16l2.37 5z" opacity="0.3" fill="#fff"></path>
-                  <path
-                    d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5H8.53L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
-                    fill="#fff"
-                  ></path>
-                </svg>
+              <Button
+                  variant={'contained'}
+                  fullWidth
+                  style={{ background: theme.palette.warning.dark, margin: '5% 0%', color: theme.palette.grey['900'] }}
+                  onClick={handleBuy}
+              >
+                <IconShoppingCart style={{ marginRight: '2%' }}></IconShoppingCart> Acheter
               </Button>
             </Grid>
           </Grid>

@@ -154,7 +154,7 @@ const Annonce = () => {
         {annonces?.map((cars, index) => (
 
             <Grid item sm={4} key={index}>
-              <AnnonceTemplate annonce={cars} user={user} link={link} fav={fav}/>
+              <AnnonceTemplate annonce={cars} user={user} link={link} fav={fav} showButton={true}/>
             </Grid>
 
           // <Card

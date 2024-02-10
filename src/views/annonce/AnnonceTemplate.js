@@ -6,7 +6,7 @@ import config from '../../config';
 import axios from 'axios';
 import {useNavigate} from "react-router";
 
-const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
+const AnnonceTemplate = ({ annonce, user, link ,fav,showButton}) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const image = require('../../assets/images/Car Sell-2.png');
@@ -108,14 +108,14 @@ const AnnonceTemplate = ({ annonce, user, link ,fav}) => {
               </Stack>
             </Grid>
             <Grid item xs={12}>
-              <Button
-                  variant={'contained'}
-                  fullWidth
-                  style={{ background: theme.palette.warning.dark, margin: '5% 0%', color: theme.palette.grey['900'] }}
-                  onClick={handleBuy}
+              {showButton && <Button
+                variant={'contained'}
+                fullWidth
+                style={{ background: theme.palette.warning.dark, margin: '5% 0%', color: theme.palette.grey['900'] }}
+                onClick={handleBuy}
               >
                 <IconShoppingCart style={{ marginRight: '2%' }}></IconShoppingCart> Acheter
-              </Button>
+              </Button>}
             </Grid>
           </Grid>
         </CardContent>

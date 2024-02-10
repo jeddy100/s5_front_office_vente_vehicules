@@ -10,10 +10,27 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
 import Logo from '../../../../ui-component/Logo';
 import AuthFooter from '../../../../ui-component/cards/AuthFooter';
+import {useEffect, useState} from "react";
 const Login = () => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  const [greeting, setGreeting] = useState('');
 
+  useEffect(() => {
+    const getGreeting = () => {
+    const currentHour = new Date().getHours();
+
+    if (currentHour >= 5 && currentHour < 12) {
+      setGreeting('Bonjour');
+    } else if (currentHour >= 12 && currentHour < 18) {
+      setGreeting('Bonne après-midi');
+    } else {
+      setGreeting('Bonsoir');
+    }
+  };
+
+  getGreeting();
+}, []);
   return (
     <AuthWrapper1>
       <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
@@ -32,10 +49,10 @@ const Login = () => {
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
                           <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                            Hi, Welcome Back
+                            {greeting}
                           </Typography>
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
-                            Enter your credentials to continue
+                            Veuillez vous connecter
                           </Typography>
                         </Stack>
                       </Grid>
@@ -60,7 +77,7 @@ const Login = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-          <AuthFooter />
+          {/*<AuthFooter />*/}
         </Grid>
       </Grid>
     </AuthWrapper1>

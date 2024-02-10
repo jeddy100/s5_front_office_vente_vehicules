@@ -43,6 +43,7 @@ const Annonce = () => {
   const [image, setImage] = useState('/images/1-porsche-911-gt3-2021-rt-hero-front.jpg');
   const [open, setOpen] = useState(false); // Add this line
   const [fav,setFav]=useState(0)
+  const [searching,setSearchin]=useState("")
 
   const [annonces, setAnnonces] = useState([]);
 
@@ -71,13 +72,19 @@ const Annonce = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const search = (urlParams.get('search'));
     console.log('User ID:', search);
-
-    const getSearchResult=async (search)=>{
-              const response= await axios.get(link+`/simpleSearch/${search}`)
-      setAnnonces(response.data.donnee);
-    }
-    getSearchResult(search)
+    setSearchin(search)
   },[]);
+
+  useEffect(() => {
+    const getSearchResult=async ()=>{
+      if(searching!==""){
+        const response= await axios.get(link+`/simpleSearch/${searching}`)
+        setAnnonces(response.data.donnee);
+      }
+
+    }
+    getSearchResult()
+  }, [searching]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);

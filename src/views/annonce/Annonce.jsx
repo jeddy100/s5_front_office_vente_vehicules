@@ -79,6 +79,22 @@ const Annonce = () => {
     getSearchResult(search)
   },[]);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = JSON.parse(urlParams.get('searchMulti'));
+    console.log('searchMulti:',(search));
+
+    if(urlParams.get('searchMulti')!==""){
+      const getSearchResult = async (search) => {
+        if (search !== null) {
+          const response = await axios.post(link + `/form_recherche_multicritere`, search)
+          setAnnonces(response.data.donnee);
+        }
+      }
+      getSearchResult(search)
+    }
+  },[]);
+
   const handleDetails = () => {
     console.log('lol');
   };

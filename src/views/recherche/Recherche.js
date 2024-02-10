@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../../config';
 import ErrorAlert from '../../ui-component/alert/ErrorAlert';
+import {useNavigate} from "react-router";
 
 const Recherche = () => {
   const theme = useTheme();
+  const navigate= useNavigate();
   const [formdata, setFormdata] = useState({
     idModele: 'tous',
     idMarque: 'tous',
@@ -18,8 +20,8 @@ const Recherche = () => {
     km2: 1000000,
     poids1: 0,
     poids2: 100000000000,
-    date1: 'tous',
-    date2: 'tous',
+    date1: "2020-01-01 00:00",
+    date2: "2025-01-01 00:00",
     idBoite: 'tous',
     idCarburant: 'tous',
     idCouleur: 'tous',
@@ -126,6 +128,8 @@ const Recherche = () => {
   };
   const handleValidation = async () => {
     // setErreurs(validateForm())
+    const datas= JSON.stringify(formdata)
+    navigate(`/annonce?searchMulti=${datas}`)
     console.log(JSON.stringify(validateForm()))
     const response = await axios.post(link + '/form_recherche_multicritere', formdata);
     console.log(JSON.stringify("recherche : "+response.data.donnee));

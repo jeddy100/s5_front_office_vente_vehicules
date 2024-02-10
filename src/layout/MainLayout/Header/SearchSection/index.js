@@ -15,6 +15,7 @@ import Transitions from '../../../../ui-component/extended/Transitions';
 import { IconAdjustmentsHorizontal, IconSearch, IconX } from '@tabler/icons';
 import { shouldForwardProp } from '@mui/system';
 import {Recherche} from "../../../../views/recherche/Recherche";
+import {useNavigate} from "react-router";
 
 // styles
 const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({
@@ -119,8 +120,12 @@ MobileSearch.propTypes = {
 const SearchSection = () => {
   const theme = useTheme();
   const [value, setValue] = useState('');
-  console.log(value)
+  const navigate=useNavigate()
+  console.log("recherche : "+value)
 
+  const handleSearch = () => {
+    navigate(`/annonce?search=${value}`)
+  };
   return (
     <>
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
@@ -176,7 +181,7 @@ const SearchSection = () => {
           }
           endAdornment={
             <InputAdornment position="end">
-              <ButtonBase sx={{ borderRadius: '12px' }}>
+              <ButtonBase sx={{ borderRadius: '12px' }} onClick={handleSearch}>
                 <HeaderAvatarStyle variant="rounded">
                   <IconAdjustmentsHorizontal stroke={1.5} size="1.3rem" />
                 </HeaderAvatarStyle>

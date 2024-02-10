@@ -67,24 +67,26 @@ const Annonce = () => {
   }, []);
 
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = (urlParams.get('search'));
+    console.log('User ID:', search);
+
+    const getSearchResult=async (search)=>{
+              const response= await axios.get(link+`/simpleSearch/${search}`)
+      setAnnonces(response.data.donnee);
+    }
+    getSearchResult(search)
+  },[]);
 
   const handleDetails = () => {
     console.log('lol');
   };
-  const getFirstLetterFromName = (nom) => {
-    return capitalize(nom.charAt(0));
-  };
 
-  function handleFavoriteClick(id) {
-    console.log(id);
-  }
 
   // manokatra modals
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
 
-  const handleOpenModal = (annonce) => {
-    setSelectedAnnonce(annonce);
-  };
 
   const handleCloseModal = () => {
     setSelectedAnnonce(null);

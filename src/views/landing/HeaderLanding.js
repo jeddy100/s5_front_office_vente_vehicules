@@ -39,7 +39,7 @@ const navigate=useNavigate()
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-        <Button variant="text"  color="dark" style={
+        <Button variant="text"   color="dark" style={
             {
                 // color:theme.palette.grey["500"],
                 margin:"auto 1.5% ",
@@ -47,7 +47,7 @@ const navigate=useNavigate()
                 // fontWeight:'bold',
                 letterSpacing:'1px'
             }
-        }>Accueil</Button>
+        }>filtres</Button>
         <Button variant="text" color="dark" style=
             {
                 {
